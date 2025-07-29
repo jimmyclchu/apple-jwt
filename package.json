@@ -1,6 +1,6 @@
 {
   "name": "@jimmyclchu/apple-jwt",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Generate Apple JWT tokens via CLI",
   "author": "jimmyclchu",
   "homepage": "https://github.com/jimmyclchu/apple-jwt",
