@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      id-token: write
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+        registry-url: 'https://registry.npmjs.org'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run full test suite
+      run: npm run test:all
+    
+    - name: Extract version from tag
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+    
+    - name: Update package.json version
+      run: npm version ${{ steps.get_version.outputs.VERSION }} --no-git-tag-version
+    
+    - name: Build for release
+      run: npm run build
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        body: |
+          ## Changes in this Release
+          
+          - See commit history for detailed changes
+          
+          ## Installation
+          
+          ```bash
+          npx @jimmyclchu/apple-jwt
+          ```
+          
+          Or install globally:
+          
+          ```bash
+          npm install -g @jimmyclchu/apple-jwt
+          ```
+        draft: false
+        prerelease: false
+    
+    - name: Publish to npm
+      run: npm publish --provenance --access public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
