@@ -70,21 +70,6 @@ exec('npx @jimmyclchu/apple-jwt -o token.jwt', (error, stdout) => {
 });
 ```
 
-## Development
-
-### CI/CD Pipeline
-
-This project uses GitHub Actions for:
-- **CI**: Automated testing on Node.js 18.x, 20.x, 22.x
-- **Release**: Automated npm publishing on git tags
-- **PR Validation**: Full test suite and security audits
-
-### Release Process
-
-1. Create a new tag: `git tag v1.0.1`
-2. Push the tag: `git push origin v1.0.1`
-3. GitHub Actions will automatically build, test, and publish to npm
-
 ## License
 
 MIT
